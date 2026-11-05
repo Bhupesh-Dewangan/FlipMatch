@@ -495,6 +495,9 @@ function createBoard() {
     card.classList.add("card", "is-flipped");
     card.dataset.icon = icon;
     card.dataset.index = index;
+    card.setAttribute("role", "button");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("aria-label", "Hidden card");
 
     const cardInner = document.createElement("div");
     cardInner.classList.add("card-inner");
@@ -564,6 +567,12 @@ function startCountdown(duration) {
 function bindCardClicks() {
   board.querySelectorAll(".card").forEach((card) => {
     card.addEventListener("click", handleCardInteraction);
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleCardInteraction(e);
+      }
+    });
   });
 }
 

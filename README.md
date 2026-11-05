@@ -1,94 +1,71 @@
+# 🃏 FlipMatch — Modern Card Matching Memory Game
 
-# 🃏 FlipMatch — Card Matching Memory Game
+FlipMatch is an arcade-style, interactive card matching memory game built with vanilla HTML5, CSS3, and modern JavaScript. Flip cards, match pairs, track moves and time, and climb the personal best leaderboard across multiple difficulty tiers!
 
-FlipMatch is a fun and interactive memory card matching game built using HTML, CSS, and JavaScript. Flip cards, find matching pairs, and clear the board while trying to finish in the fewest moves.
-
-Simple, clean, and perfect for quick brain workouts.
-
-## 📸 Preview
-
-<img width="1920" height="971" alt="FM-Home" src="https://github.com/user-attachments/assets/fa8b4fee-0f9d-421d-a3c1-d0cb1eba501f" />
+Designed with a modern glassmorphic arcade aesthetic, full mobile-to-desktop responsiveness, synthesized sound effects, and rewarding win celebrations.
 
 ---
-<img width="1920" height="972" alt="FM L1" src="https://github.com/user-attachments/assets/cb46b6ce-903d-4f3c-ad47-6ffaf7f69a62" />
-
----
-<img width="1920" height="972" alt="FM L2" src="https://github.com/user-attachments/assets/56ebca77-0091-4f5b-aa90-2ee1beae5676" />
-
----
-<img width="1920" height="971" alt="FM Win" src="https://github.com/user-attachments/assets/4070e21a-6689-4a3d-baa9-5accc6b86e81" />
-
----
-## 🎮 Gameplay
-
-- Click a card to flip and reveal its icon
-
-- Flip another card to find its matching pair
-
-- Matching cards stay open
-
-- Non-matching cards flip back
-
-- Match all pairs to win
 
 ## ✨ Features
 
-- 🃏 Card Flipping Mechanics — Interactive flip animation
+- 📱 **Fluid Viewport-Aware Responsive Engine** — The entire board, HUD, and controls automatically fit within `100dvh` without requiring vertical or horizontal scrolling on mobile, tablet, or desktop.
+- 🃏 **True 3D Dual-Sided Flip Mechanics** — Hardware-accelerated CSS 3D transforms (`rotateY(180deg)`) with front and back card textures, smooth flip-back preview, and match/mismatch physics.
+- 🔊 **Synthesized Web Audio System** — Crisp sound effects for card flips, pair matches, mismatches, countdown beats, and victory fanfares generated via the Web Audio API (zero external assets or network requests) with a persistent mute toggle.
+- 🎯 **Multiple Difficulty Tiers**:
+  - **Easy:** 4 × 4 grid (8 pairs)
+  - **Medium:** 6 × 6 grid (18 pairs)
+  - **Hard:** 8 × 8 grid (32 pairs) with density-optimized scaling
+- 🎨 **Multiple Card Themes** — Fruits 🍎, Emojis 😀, Animals 🐶, and Numbers 🔢.
+- 🏆 **Multi-Difficulty Personal Bests** — Persistent local storage tracking best scores independently per difficulty tier, featured right on the Start Screen.
+- ⏸️ **Anti-Cheat Pause Shield** — Pausing activates a backdrop-filter blur shield over the board so players cannot peek at card placements while paused.
+- 🎊 **Celebration Confetti & 3-Star Rating** — Dynamic star rating (1 to 3 stars based on move efficiency) and a vibrant canvas confetti cannon upon victory.
+- ♿ **Accessibility & Polish** — Full keyboard navigation (`Tab`, `Enter`, `Space`), touch-optimized interaction (`touch-action: manipulation`), and `prefers-reduced-motion` support.
 
-- 🔍 Matching Logic — Detects identical card pairs
+---
 
-- 🎯 Multiple Difficulty Levels — Different board sizes
+## 🕹️ Controls
 
-- 🎨 Custom Icon Sets — Variety of visuals
+| Action | Mouse / Touch | Keyboard |
+| :--- | :--- | :--- |
+| **Flip Card** | Click / Tap card | `Tab` to navigate, `Enter` or `Space` to flip |
+| **Pause / Resume** | Click Pause button | Click or press Resume |
+| **Restart Game** | Click Restart button | Quick board re-shuffle |
+| **Toggle Sound** | Click 🔊 / 🔇 button | Persistent mute preference |
+| **Back to Menu** | Click Menu button | Returns to difficulty/theme select |
 
-- 🧠 Memory Challenge — Improves focus and recall
-
-- 📊 Move Counter — Tracks player moves
-
-- 📱 Responsive Design — Works on mobile & desktop
-
-- 🔄 Replay Anytime — Restart and try again
-
-## 🛠 Tech Stack
-
+---
 
 ## 📂 Project Structure
+
 ```bash
 FlipMatch/
 │
-├── index.html        # Main HTML file
-├── style.css         # Game styles
-├── script.js         # Game logic
-└── README.md
+├── index.html        # Semantic HTML5 markup, accessible HUD & modals
+├── style.css         # Modern arcade design system, 3D flip CSS & responsive rules
+├── script.js         # Game loop, Web Audio synthesizer, canvas confetti & board math
+└── README.md         # Documentation
 ```
+
+---
 
 ## 🚀 Getting Started
+
+No build tools or servers required! Simply clone and open:
+
 ```bash
-#Clone the Repository
-git clone https://github.com/Bhupesh-Dewangan/FlipMatch
-cd flipmatch
+# Clone the Repository
+git clone https://github.com/Bhupesh-Dewangan/FlipMatch.git
+cd FlipMatch
 
-#Run the Game
-Simply open the index.html file in your browser.
-
+# Open the game in your browser
+# (Double-click index.html or open via VS Code Live Server)
 ```
 
-## 🧠 What This Project Demonstrates
+---
 
-- DOM manipulation
+## 🧠 Technical Highlights
 
-- Event handling
-
-- Game state management
-
-- Matching algorithm logic
-
-- Responsive UI design
-
-- CSS animations
-
-## 🎯 Why FlipMatch?
-
-FlipMatch delivers classic memory-game fun with customizable difficulty and visuals while showcasing core web development fundamentals.
-
-Train your brain. Beat your score. Enjoy the challenge. 🧩✨
+- **CSS Custom Properties & Glassmorphism:** Theme tokens, backdrop filters, and subtle ambient gradients.
+- **Dynamic Viewport Math:** Viewport-aware grid dimensions calculated dynamically against `window.innerHeight` and `window.innerWidth`.
+- **Web Audio API:** Oscillator and gain node synthesis with zero audio file latency.
+- **Vanilla Canvas Particle Engine:** Autonomous multi-colored confetti physics with frame-rate request animation loops.
