@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <title>FlipMatch — Matching Card Game</title>
+    <title>FlipMatch — Modern Card Matching Game</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -69,7 +69,7 @@
         </section>
 
         <button id="start-btn" class="cta-primary-btn">
-          <span>Play Game</span>
+          <span>Play Now</span>
           <span class="btn-arrow">➔</span>
         </button>
       </div>
@@ -77,34 +77,114 @@
 
     <!-- Game Container -->
     <main id="game-container" class="screen-view" style="display: none">
-      <!-- Header -->
-      <h1 class="game-title">FlipMatch</h1>
+      <!-- Game Top Navigation -->
+      <nav class="game-nav">
+        <button id="exit-btn" class="nav-btn" title="Back to Menu" aria-label="Exit to Menu">
+          <span class="nav-btn-icon">←</span>
+          <span class="nav-btn-text">Menu</span>
+        </button>
+        <h2 class="nav-game-title">FlipMatch</h2>
+        <div class="nav-right-slot">
+          <span id="current-diff-badge" class="nav-badge">Easy</span>
+        </div>
+      </nav>
 
-      <!-- Stats row above the board -->
-      <div class="stats-row">
-        <span id="timer">Time: 00:00</span>
-        <span id="moves">Moves: 0</span>
+      <!-- Stats HUD -->
+      <div class="stats-hud">
+        <div class="hud-card">
+          <span class="hud-icon">⏱️</span>
+          <div class="hud-meta">
+            <span class="hud-label">Time</span>
+            <span id="timer" class="hud-value">00:00</span>
+          </div>
+        </div>
+        <div class="hud-card">
+          <span class="hud-icon">🔁</span>
+          <div class="hud-meta">
+            <span class="hud-label">Moves</span>
+            <span id="moves" class="hud-value">0</span>
+          </div>
+        </div>
+        <div class="hud-card">
+          <span class="hud-icon">🎯</span>
+          <div class="hud-meta">
+            <span class="hud-label">Matches</span>
+            <span id="pairs-left" class="hud-value">0 / 8</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Game Board -->
-      <div id="game-board"></div>
+      <!-- Game Board Container & Pause Overlay -->
+      <div class="board-wrapper">
+        <div id="game-board"></div>
 
-      <!-- Buttons row at bottom -->
-      <div class="buttons-row">
-        <button id="pause-btn">Pause</button>
-        <button id="reset-btn">Restart</button>
-        <button id="exit-btn">Exit</button>
+        <!-- Pause Overlay (Anti-cheat) -->
+        <div id="pause-overlay" class="pause-overlay hidden">
+          <div class="pause-dialog">
+            <span class="pause-icon">⏸️</span>
+            <h3>Game Paused</h3>
+            <p>Cards are hidden while paused.</p>
+            <button id="resume-dialog-btn" class="cta-primary-btn small">Resume Game</button>
+          </div>
+        </div>
       </div>
+
+      <!-- Footer Buttons -->
+      <footer class="game-controls-bar">
+        <button id="pause-btn" class="control-btn warning">
+          <span class="btn-icon">⏸️</span>
+          <span class="btn-label">Pause</span>
+        </button>
+        <button id="reset-btn" class="control-btn secondary">
+          <span class="btn-icon">🔄</span>
+          <span class="btn-label">Restart</span>
+        </button>
+      </footer>
     </main>
 
     <!-- Win Modal -->
-    <div id="win-modal" class="modal hidden">
-      <div class="modal-content">
-        <h2>🎉 You Won!</h2>
-        <p id="final-time"></p>
-        <p id="final-moves"></p>
-        <p id="best-score"></p>
-        <button id="play-again-btn">Play Again</button>
+    <div id="win-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="win-heading">
+      <div class="modal-card">
+        <div class="win-header">
+          <div class="trophy-badge">🏆</div>
+          <h2 id="win-heading">Splendid!</h2>
+          <p class="win-subtitle">You solved the puzzle</p>
+        </div>
+
+        <!-- Star Rating -->
+        <div class="star-rating" id="star-rating">
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+        </div>
+
+        <div class="win-stats-grid">
+          <div class="win-stat-box">
+            <span class="stat-icon">⏱️</span>
+            <span class="stat-name">Time</span>
+            <span id="final-time" class="stat-val">00:00</span>
+          </div>
+          <div class="win-stat-box">
+            <span class="stat-icon">🔁</span>
+            <span class="stat-name">Moves</span>
+            <span id="final-moves" class="stat-val">0</span>
+          </div>
+          <div class="win-stat-box highlight">
+            <span class="stat-icon">🎖️</span>
+            <span class="stat-name">Best</span>
+            <span id="best-score" class="stat-val">—</span>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="play-again-btn" class="cta-primary-btn">
+            <span>Play Again</span>
+            <span>🔄</span>
+          </button>
+          <button id="modal-menu-btn" class="cta-secondary-btn">
+            <span>Main Menu</span>
+          </button>
+        </div>
       </div>
     </div>
 

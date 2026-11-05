@@ -6,13 +6,19 @@ const startScreen = document.getElementById("start-screen");
 
 const timerDisplay = document.getElementById("timer");
 const movesDisplay = document.getElementById("moves");
+const pairsLeftDisplay = document.getElementById("pairs-left");
+const currentDiffBadge = document.getElementById("current-diff-badge");
 const pauseBtn = document.getElementById("pause-btn");
+const pauseOverlay = document.getElementById("pause-overlay");
+const resumeDialogBtn = document.getElementById("resume-dialog-btn");
 
 const winModal = document.getElementById("win-modal");
 const finalTime = document.getElementById("final-time");
 const finalMoves = document.getElementById("final-moves");
 const bestScoreText = document.getElementById("best-score");
 const playAgainBtn = document.getElementById("play-again-btn");
+const modalMenuBtn = document.getElementById("modal-menu-btn");
+const starRatingContainer = document.getElementById("star-rating");
 
 const diffButtons = document.querySelectorAll(".diff-btn");
 
@@ -187,9 +193,9 @@ let isPaused = false;
 let difficulty = "easy";
 
 const difficultyConfig = {
-  easy: { grid: 4, pairs: 8 },
-  medium: { grid: 6, pairs: 18 },
-  hard: { grid: 8, pairs: 32 },
+  easy: { grid: 4, pairs: 8, name: "Easy" },
+  medium: { grid: 6, pairs: 18, name: "Medium" },
+  hard: { grid: 8, pairs: 32, name: "Hard" },
 };
 
 // Shuffle
@@ -206,21 +212,32 @@ function startTimer() {
   timer = setInterval(() => {
     if (!isPaused) {
       seconds++;
-      let min = String(Math.floor(seconds / 60)).padStart(2, "0");
-      let sec = String(seconds % 60).padStart(2, "0");
-      timerDisplay.textContent = `Time: ${min}:${sec}`;
+      timerDisplay.textContent = formatTime(seconds);
     }
   }, 1000);
 }
 
 // Reset stats
 function resetStats() {
+  clearInterval(timer);
   moves = 0;
   seconds = 0;
   isPaused = false;
-  pauseBtn.textContent = "Pause";
-  movesDisplay.textContent = "Moves: 0";
-  startTimer();
+  flipped = [];
+  matchedCount = 0;
+
+  const label = pauseBtn.querySelector(".btn-label");
+  const icon = pauseBtn.querySelector(".btn-icon");
+  if (label) label.textContent = "Pause";
+  if (icon) icon.textContent = "⏸️";
+  if (pauseOverlay) pauseOverlay.classList.add("hidden");
+
+  timerDisplay.textContent = "00:00";
+  movesDisplay.textContent = "0";
+
+  const totalPairs = difficultyConfig[difficulty].pairs;
+  if (pairsLeftDisplay) pairsLeftDisplay.textContent = `0 / ${totalPairs}`;
+  if (currentDiffBadge) currentDiffBadge.textContent = difficultyConfig[difficulty].name;
 }
 
 // Create board
@@ -288,21 +305,46 @@ function formatTime(sec) {
   return `${min}:${s}`;
 }
 
+function calculateStars(movesTaken, pairsCount) {
+  if (movesTaken <= Math.floor(pairsCount * 1.5)) return 3;
+  if (movesTaken <= Math.floor(pairsCount * 2.2)) return 2;
+  return 1;
+}
+
+function renderStars(count) {
+  if (!starRatingContainer) return;
+  starRatingContainer.innerHTML = "";
+  for (let i = 1; i <= 3; i++) {
+    const star = document.createElement("span");
+    star.classList.add("star");
+    if (i <= count) {
+      star.classList.add("filled");
+      star.style.animationDelay = `${i * 0.15}s`;
+    }
+    star.textContent = "★";
+    starRatingContainer.appendChild(star);
+  }
+}
+
 function showWinModal() {
   clearInterval(timer);
 
-  finalTime.textContent = `⏱ Time: ${formatTime(seconds)}`;
-  finalMoves.textContent = `🔁 Moves: ${moves}`;
+  finalTime.textContent = formatTime(seconds);
+  finalMoves.textContent = String(moves);
 
   // Best score logic (lower moves = better)
   const best = localStorage.getItem("flipmatch_best");
 
   if (!best || moves < Number(best)) {
     localStorage.setItem("flipmatch_best", moves);
-    bestScoreText.textContent = "🏆 Best Score: " + moves + " (New!)";
+    bestScoreText.textContent = `${moves} (New!)`;
   } else {
-    bestScoreText.textContent = "🏆 Best Score: " + best;
+    bestScoreText.textContent = `${best} moves`;
   }
+
+  const { pairs } = difficultyConfig[difficulty];
+  const stars = calculateStars(moves, pairs);
+  renderStars(stars);
 
   winModal.classList.remove("hidden");
 }
@@ -367,7 +409,10 @@ function flipCard(e) {
       first.classList.add("is-matched");
       second.classList.add("is-matched");
       matchedCount += 1;
-      if (matchedCount === difficultyConfig[difficulty].pairs) {
+      const totalPairs = difficultyConfig[difficulty].pairs;
+      if (pairsLeftDisplay) pairsLeftDisplay.textContent = `${matchedCount} / ${totalPairs}`;
+
+      if (matchedCount === totalPairs) {
         setTimeout(showWinModal, 300);
       }
     } else {
@@ -435,15 +480,26 @@ startBtn.addEventListener("click", function () {
   createBoard();
 });
 
-pauseBtn.addEventListener("click", function () {
+function togglePause() {
   isPaused = !isPaused;
+  const label = pauseBtn.querySelector(".btn-label");
+  const icon = pauseBtn.querySelector(".btn-icon");
 
   if (isPaused) {
-    pauseBtn.textContent = "Resume";
+    if (label) label.textContent = "Resume";
+    if (icon) icon.textContent = "▶️";
+    if (pauseOverlay) pauseOverlay.classList.remove("hidden");
   } else {
-    pauseBtn.textContent = "Pause";
+    if (label) label.textContent = "Pause";
+    if (icon) icon.textContent = "⏸️";
+    if (pauseOverlay) pauseOverlay.classList.add("hidden");
   }
-});
+}
+
+pauseBtn.addEventListener("click", togglePause);
+if (resumeDialogBtn) {
+  resumeDialogBtn.addEventListener("click", togglePause);
+}
 
 window.addEventListener("resize", () => {
   if (gameContainer.style.display === "flex") {
@@ -453,17 +509,23 @@ window.addEventListener("resize", () => {
 
 const exitBtn = document.getElementById("exit-btn");
 
-exitBtn.addEventListener("click", () => {
-  // Hide game container and win modal
-  gameContainer.style.display = "none";
+function exitToMenu() {
+  clearInterval(timer);
   winModal.classList.add("hidden");
+  if (pauseOverlay) pauseOverlay.classList.add("hidden");
 
   // Show start screen
+  gameContainer.style.display = "none";
   startScreen.style.display = "flex";
 
   // Reset stats so a new game starts fresh
   resetStats();
-});
+}
+
+exitBtn.addEventListener("click", exitToMenu);
+if (modalMenuBtn) {
+  modalMenuBtn.addEventListener("click", exitToMenu);
+}
 
 const themeButtons = document.querySelectorAll(".theme-btn");
 
