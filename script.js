@@ -241,10 +241,26 @@ function createBoard() {
 
   cards.forEach((icon, index) => {
     const card = document.createElement("div");
-    card.classList.add("card");
+    card.classList.add("card", "is-flipped"); // Start face-up for preview
     card.dataset.icon = icon;
     card.dataset.index = index;
-    card.textContent = icon; // show icon for preview
+
+    const cardInner = document.createElement("div");
+    cardInner.classList.add("card-inner");
+
+    // Face down (front)
+    const cardFront = document.createElement("div");
+    cardFront.classList.add("card-front");
+    cardFront.innerHTML = `<span>?</span>`;
+
+    // Face up (back)
+    const cardBack = document.createElement("div");
+    cardBack.classList.add("card-back");
+    cardBack.textContent = icon;
+
+    cardInner.appendChild(cardFront);
+    cardInner.appendChild(cardBack);
+    card.appendChild(cardInner);
     board.appendChild(card);
   });
 
@@ -252,20 +268,18 @@ function createBoard() {
 
   // Disable clicking during preview
   board.querySelectorAll(".card").forEach((card) => {
-    card.removeEventListener("click", flipCard); // remove old just in case
+    card.removeEventListener("click", flipCard);
   });
 
-  // Preview duration (2 seconds)
+  // 1.8s preview: Flip cards back face-down smoothly
   setTimeout(() => {
-    // Hide all cards
     board.querySelectorAll(".card").forEach((card) => {
-      card.textContent = "";
-      card.addEventListener("click", flipCard); // enable flipping
+      card.classList.remove("is-flipped");
+      card.addEventListener("click", flipCard);
     });
 
-    // Start countdown before enabling clicks
-    startCountdown(3); // 3-second countdown
-  }, 2000);
+    startCountdown(3);
+  }, 1800);
 }
 
 function formatTime(sec) {
@@ -335,14 +349,13 @@ function flipCard(e) {
   if (isPaused) return;
   const card = e.currentTarget;
   if (
-    card.classList.contains("flipped") ||
-    card.classList.contains("matched") ||
+    card.classList.contains("is-flipped") ||
+    card.classList.contains("is-matched") ||
     flipped.length === 2
   )
     return;
 
-  card.textContent = card.dataset.icon;
-  card.classList.add("flipped");
+  card.classList.add("is-flipped");
   flipped.push(card);
 
   if (flipped.length === 2) {
@@ -351,19 +364,19 @@ function flipCard(e) {
 
     const [first, second] = flipped;
     if (first.dataset.icon === second.dataset.icon) {
-      first.classList.add("matched");
-      second.classList.add("matched");
+      first.classList.add("is-matched");
+      second.classList.add("is-matched");
       matchedCount += 1;
       if (matchedCount === difficultyConfig[difficulty].pairs) {
         setTimeout(showWinModal, 300);
       }
     } else {
+      first.classList.add("is-mismatched");
+      second.classList.add("is-mismatched");
       setTimeout(() => {
-        first.textContent = "";
-        second.textContent = "";
-        first.classList.remove("flipped");
-        second.classList.remove("flipped");
-      }, 800);
+        first.classList.remove("is-flipped", "is-mismatched");
+        second.classList.remove("is-flipped", "is-mismatched");
+      }, 700);
     }
     flipped = [];
   }

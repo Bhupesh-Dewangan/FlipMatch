@@ -357,21 +357,112 @@ body::before {
   }
 }
 
+/* 3D Card Architecture */
 .card {
-  background: #3498db;
-  color: white;
+  perspective: 1000px;
+  cursor: pointer;
+  position: relative;
+  background: transparent;
+  outline: none;
+  transition: transform var(--transition-fast);
+}
+
+.card:hover:not(.is-flipped):not(.is-matched) {
+  transform: translateY(-3px) scale(1.03);
+}
+
+.card:active:not(.is-flipped):not(.is-matched) {
+  transform: translateY(1px) scale(0.96);
+}
+
+/* 3D Inner Wrapper */
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border-radius: var(--radius-card);
+}
+
+/* Flipped or Matched: Rotate 180 degrees */
+.card.is-flipped .card-inner,
+.card.is-matched .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Card Faces */
+.card-front,
+.card-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--radius-card);
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
-  border-radius: 10px;
-  user-select: none;
+  box-shadow: var(--shadow-md);
 }
 
-.flipped,
-.matched {
-  background: #2ecc71;
+/* Face Down (Card Front / Question Mark Side) */
+.card-front {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.25);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  transform: rotateY(0deg);
+}
+
+.card-front span {
+  font-size: 0.9em;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+}
+
+.card:hover .card-front span {
+  opacity: 0.9;
+  color: #a5b4fc;
+}
+
+/* Face Up (Card Back / Revealed Emoji Side) */
+.card-back {
+  background: linear-gradient(145deg, #2a374f, #1e293b);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: rotateY(180deg);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.25);
+}
+
+/* Matched Card State */
+.card.is-matched {
   cursor: default;
+}
+
+.card.is-matched .card-back {
+  background: linear-gradient(145deg, #065f46, #047857);
+  border-color: rgba(52, 211, 153, 0.6);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+  animation: matchPop 0.45s ease forwards;
+}
+
+@keyframes matchPop {
+  0% { transform: rotateY(180deg) scale(0.9); }
+  50% { transform: rotateY(180deg) scale(1.15); }
+  100% { transform: rotateY(180deg) scale(1); }
+}
+
+/* Mismatch Shake Animation */
+.card.is-mismatched .card-inner {
+  animation: mismatchShake 0.4s ease-in-out;
+}
+
+@keyframes mismatchShake {
+  0%, 100% { transform: rotateY(180deg) translateX(0); }
+  20%, 60% { transform: rotateY(180deg) translateX(-6px); }
+  40%, 80% { transform: rotateY(180deg) translateX(6px); }
 }
 
 .buttons-row {
