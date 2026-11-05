@@ -370,28 +370,35 @@ function flipCard(e) {
 }
 
 function applyResponsiveLayout(grid) {
-  const gap = 8;
+  // Gap scales based on grid density
+  const gap = grid >= 8 ? 6 : grid >= 6 ? 8 : 10;
+  const horizontalPadding = 32;
 
-  // Measure available width from container
-  const containerWidth = gameContainer.clientWidth;
+  // Measure viewport bounds
+  const maxAvailWidth = Math.min(window.innerWidth - horizontalPadding, 560);
 
-  // Keep board within safe bounds
-  const maxBoardWidth = Math.min(containerWidth - 20, 600);
+  // Available vertical room for board (accounting for header, HUD and controls)
+  const isMobile = window.innerWidth <= 480;
+  const headerAndControlsHeight = isMobile ? 180 : 210;
+  const maxAvailHeight = Math.max(260, window.innerHeight - headerAndControlsHeight);
 
-  let cardSize = Math.floor((maxBoardWidth - gap * (grid - 1)) / grid);
+  // Board stays square and fits both bounds perfectly without scrolling
+  const boardDim = Math.floor(Math.min(maxAvailWidth, maxAvailHeight));
+  const cardSize = Math.floor((boardDim - gap * (grid - 1)) / grid);
+  const actualBoardSize = cardSize * grid + gap * (grid - 1);
 
-  // Increase card size slightly in hard mode
-  if (difficulty === "hard") {
-    cardSize = Math.floor(cardSize * 1.4); // increase by 40%
-  }
-
+  board.style.width = `${actualBoardSize}px`;
+  board.style.height = `${actualBoardSize}px`;
   board.style.gridTemplateColumns = `repeat(${grid}, ${cardSize}px)`;
-  board.style.gap = gap + "px";
+  board.style.gridTemplateRows = `repeat(${grid}, ${cardSize}px)`;
+  board.style.gap = `${gap}px`;
 
+  // Scale icon and font sizes proportionally
+  const fontSize = Math.floor(cardSize * (grid >= 8 ? 0.45 : 0.52));
   document.querySelectorAll(".card").forEach((card) => {
-    card.style.width = cardSize + "px";
-    card.style.height = cardSize + "px";
-    card.style.fontSize = cardSize * 0.35 + "px";
+    card.style.width = `${cardSize}px`;
+    card.style.height = `${cardSize}px`;
+    card.style.fontSize = `${fontSize}px`;
   });
 }
 
