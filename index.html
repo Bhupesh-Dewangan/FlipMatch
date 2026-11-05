@@ -2,35 +2,81 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FlipMatch - Matching Card Game</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>FlipMatch — Matching Card Game</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <!-- Start Screen -->
-    <div id="start-screen">
-      <h1 class="game-title">FlipMatch</h1>
-      <button id="start-btn">Play Game</button>
-      <!-- <br /> -->
-      <div class="difficulty">
-        <p>Select Difficulty</p>
-        <button class="diff-btn" data-level="easy">Easy</button>
-        <button class="diff-btn" data-level="medium">Medium</button>
-        <button class="diff-btn" data-level="hard">Hard</button>
-      </div>
+    <main id="start-screen" class="screen-view active">
+      <div class="start-card">
+        <header class="game-header">
+          <div class="logo-badge">🃏</div>
+          <h1 class="game-title">FlipMatch</h1>
+          <p class="game-subtitle">Train your brain. Beat your best score.</p>
+        </header>
 
-      <div class="themes">
-        <p>Select Theme</p>
-        <button class="theme-btn" data-theme="fruits">Fruits 🍎</button>
-        <button class="theme-btn" data-theme="emojis">Emojis 😀</button>
-        <button class="theme-btn" data-theme="animals">Animals 🐶</button>
-        <button class="theme-btn" data-theme="numbers">Numbers 🔢</button>
+        <!-- Difficulty Selection -->
+        <section class="option-group">
+          <label class="group-label">Difficulty Level</label>
+          <div class="pill-group" role="radiogroup" aria-label="Difficulty Level">
+            <button class="diff-btn active" data-level="easy" aria-checked="true" role="radio">
+              <span class="pill-name">Easy</span>
+              <span class="pill-meta">4 × 4 · 8 Pairs</span>
+            </button>
+            <button class="diff-btn" data-level="medium" aria-checked="false" role="radio">
+              <span class="pill-name">Medium</span>
+              <span class="pill-meta">6 × 6 · 18 Pairs</span>
+            </button>
+            <button class="diff-btn" data-level="hard" aria-checked="false" role="radio">
+              <span class="pill-name">Hard</span>
+              <span class="pill-meta">8 × 8 · 32 Pairs</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- Theme Selection -->
+        <section class="option-group">
+          <label class="group-label">Card Theme</label>
+          <div class="pill-group grid-2col" role="radiogroup" aria-label="Card Theme">
+            <button class="theme-btn active" data-theme="fruits" aria-checked="true" role="radio">
+              <span class="theme-icon">🍎</span>
+              <span>Fruits</span>
+            </button>
+            <button class="theme-btn" data-theme="emojis" aria-checked="false" role="radio">
+              <span class="theme-icon">😀</span>
+              <span>Emojis</span>
+            </button>
+            <button class="theme-btn" data-theme="animals" aria-checked="false" role="radio">
+              <span class="theme-icon">🐶</span>
+              <span>Animals</span>
+            </button>
+            <button class="theme-btn" data-theme="numbers" aria-checked="false" role="radio">
+              <span class="theme-icon">🔢</span>
+              <span>Numbers</span>
+            </button>
+          </div>
+        </section>
+
+        <button id="start-btn" class="cta-primary-btn">
+          <span>Play Game</span>
+          <span class="btn-arrow">➔</span>
+        </button>
       </div>
-      
-    </div>
+    </main>
 
     <!-- Game Container -->
-    <div id="game-container" style="display: none">
+    <main id="game-container" class="screen-view" style="display: none">
       <!-- Header -->
       <h1 class="game-title">FlipMatch</h1>
 
@@ -49,7 +95,7 @@
         <button id="reset-btn">Restart</button>
         <button id="exit-btn">Exit</button>
       </div>
-    </div>
+    </main>
 
     <!-- Win Modal -->
     <div id="win-modal" class="modal hidden">
@@ -58,7 +104,6 @@
         <p id="final-time"></p>
         <p id="final-moves"></p>
         <p id="best-score"></p>
-
         <button id="play-again-btn">Play Again</button>
       </div>
     </div>
