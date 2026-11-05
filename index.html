@@ -17,6 +17,11 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Sound Toggle Floating Button -->
+    <button id="sound-toggle-btn" class="icon-toggle-btn" aria-label="Toggle Sound" title="Toggle Sound">
+      <span id="sound-icon">🔊</span>
+    </button>
+
     <!-- Start Screen -->
     <main id="start-screen" class="screen-view active">
       <div class="start-card">
@@ -65,6 +70,25 @@
               <span class="theme-icon">🔢</span>
               <span>Numbers</span>
             </button>
+          </div>
+        </section>
+
+        <!-- Personal Bests Dashboard -->
+        <section class="records-summary">
+          <span class="records-title">🏆 Best Records</span>
+          <div class="records-chips">
+            <div class="record-chip">
+              <span class="chip-label">Easy</span>
+              <span class="chip-value" id="record-easy">—</span>
+            </div>
+            <div class="record-chip">
+              <span class="chip-label">Medium</span>
+              <span class="chip-value" id="record-medium">—</span>
+            </div>
+            <div class="record-chip">
+              <span class="chip-label">Hard</span>
+              <span class="chip-value" id="record-hard">—</span>
+            </div>
           </div>
         </section>
 
@@ -142,8 +166,9 @@
       </footer>
     </main>
 
-    <!-- Win Modal -->
+    <!-- Win Celebration Modal -->
     <div id="win-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="win-heading">
+      <canvas id="confetti-canvas"></canvas>
       <div class="modal-card">
         <div class="win-header">
           <div class="trophy-badge">🏆</div>
@@ -171,9 +196,13 @@
           </div>
           <div class="win-stat-box highlight">
             <span class="stat-icon">🎖️</span>
-            <span class="stat-name">Best</span>
+            <span class="stat-name">Record</span>
             <span id="best-score" class="stat-val">—</span>
           </div>
+        </div>
+
+        <div id="new-record-badge" class="new-record-badge hidden">
+          ✨ New Best Record! ✨
         </div>
 
         <div class="modal-actions">
