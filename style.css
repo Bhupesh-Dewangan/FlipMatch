@@ -65,6 +65,12 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg-main);
@@ -187,6 +193,7 @@ body::before {
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 24px rgba(99, 102, 241, 0.3);
+  color: #a5b4fc;
   animation: floatBadge 3s ease-in-out infinite;
 }
 
@@ -300,16 +307,11 @@ body::before {
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
   font-size: 0.95rem;
   font-weight: 600;
   transition: all var(--transition-normal);
   font-family: var(--font-body);
-}
-
-.theme-btn .theme-icon {
-  font-size: 1.3rem;
-  line-height: 1;
 }
 
 .theme-btn:hover {
@@ -888,7 +890,26 @@ body::before {
   align-items: center;
   justify-content: center;
   box-shadow: 0 0 30px rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
   animation: floatBadge 2.5s ease-in-out infinite;
+}
+
+.hud-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #818cf8;
+}
+
+.stat-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+}
+
+.win-stat-box.highlight .stat-icon-wrap {
+  color: #fbbf24;
 }
 
 .win-header h2 {

@@ -195,9 +195,16 @@ class SoundManager {
   }
 
   updateSoundButtonUI() {
-    const icon = document.getElementById("sound-icon");
-    if (icon) {
-      icon.textContent = this.muted ? "🔇" : "🔊";
+    const onIcon = document.getElementById("sound-icon-on");
+    const offIcon = document.getElementById("sound-icon-off");
+    if (onIcon && offIcon) {
+      if (this.muted) {
+        onIcon.classList.add("hidden");
+        offIcon.classList.remove("hidden");
+      } else {
+        onIcon.classList.remove("hidden");
+        offIcon.classList.add("hidden");
+      }
     }
   }
 }
@@ -436,9 +443,13 @@ function resetStats() {
   flipped = [];
 
   const label = pauseBtn.querySelector(".btn-label");
-  const icon = pauseBtn.querySelector(".btn-icon");
   if (label) label.textContent = "Pause";
-  if (icon) icon.textContent = "⏸️";
+  const pauseIcon = document.getElementById("pause-btn-icon-pause");
+  const playIcon = document.getElementById("pause-btn-icon-play");
+  if (pauseIcon && playIcon) {
+    pauseIcon.classList.remove("hidden");
+    playIcon.classList.add("hidden");
+  }
   if (pauseOverlay) pauseOverlay.classList.add("hidden");
 
   timerDisplay.textContent = "00:00";
@@ -697,15 +708,22 @@ function togglePause() {
 
   isPaused = !isPaused;
   const label = pauseBtn.querySelector(".btn-label");
-  const icon = pauseBtn.querySelector(".btn-icon");
+  const pauseIcon = document.getElementById("pause-btn-icon-pause");
+  const playIcon = document.getElementById("pause-btn-icon-play");
 
   if (isPaused) {
     if (label) label.textContent = "Resume";
-    if (icon) icon.textContent = "▶️";
+    if (pauseIcon && playIcon) {
+      pauseIcon.classList.add("hidden");
+      playIcon.classList.remove("hidden");
+    }
     if (pauseOverlay) pauseOverlay.classList.remove("hidden");
   } else {
     if (label) label.textContent = "Pause";
-    if (icon) icon.textContent = "⏸️";
+    if (pauseIcon && playIcon) {
+      pauseIcon.classList.remove("hidden");
+      playIcon.classList.add("hidden");
+    }
     if (pauseOverlay) pauseOverlay.classList.add("hidden");
   }
 }
