@@ -218,7 +218,7 @@ class ConfettiEffect {
     this.ctx = this.canvas ? this.canvas.getContext("2d") : null;
     this.particles = [];
     this.animationId = null;
-    this.colors = ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981", "#3b82f6"];
+    this.colors = ["#ffffff", "#e5e5e5", "#d4d4d4", "#a3a3a3", "#737373", "#f5f5f5"];
     this.handleResize = this.handleResize.bind(this);
     window.addEventListener("resize", this.handleResize);
     this.handleResize();
